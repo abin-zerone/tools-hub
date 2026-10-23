@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+  <title>Base64 Toolkit — Private, in-browser tools</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="page-header">
+      <div class="eyebrow">LOCAL TOOL · NO UPLOADS</div>
+      <h1>Base64 Toolkit</h1>
+      <p class="subtitle">Encode text, decode Base64, and convert files — right here in your browser.</p>
+      <p class="privacy-note"><span aria-hidden="true">●</span> Everything runs in your browser. Nothing is sent or stored.</p>
+    </header>
+
+    <nav class="tabs" aria-label="Tool mode">
+      <button class="tab active" id="text-tab" type="button" aria-selected="true" aria-controls="text-panel">Text</button>
+      <button class="tab" id="file-tab" type="button" aria-selected="false" aria-controls="file-panel">Files</button>
+    </nav>
+
+    <section id="text-panel" class="panel" aria-labelledby="text-tab">
+      <div class="options-row">
+        <label class="toggle"><input id="url-safe" type="checkbox"> <span>URL-safe Base64 <small>(- and _; remove padding)</small></span></label>
+      </div>
+      <div class="editor-grid">
+        <div class="field">
+          <div class="field-heading"><label for="text-input">Input</label><span id="input-count" class="count">0 characters · 0 bytes</span></div>
+          <textarea id="text-input" autocomplete="off" spellcheck="false" placeholder="Enter text or a Base64 string…" aria-describedby="text-help"></textarea>
+          <p id="text-help" class="hint">UTF-8 supported, including emoji and non-Latin scripts.</p>
+        </div>
+        <div class="field">
+          <div class="field-heading"><label for="text-output">Output</label><span id="output-count" class="count">0 characters · 0 bytes</span></div>
+          <textarea id="text-output" autocomplete="off" spellcheck="false" placeholder="Your result appears here…" readonly></textarea>
+          <div class="button-row">
+            <button id="copy-output" class="button secondary" type="button">Copy output</button>
+            <button id="swap-text" class="button secondary" type="button">Swap</button>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="encode" class="button primary" type="button">Encode</button>
+        <button id="decode" class="button primary" type="button">Decode</button>
+        <button id="clear-text" class="button danger-quiet" type="button">Clear</button>
+      </div>
+      <p id="text-status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="file-panel" class="panel" aria-labelledby="file-tab" hidden>
+      <div class="file-section">
+        <h2>File to Base64</h2>
+        <p class="hint">Choose a file or drop it into the area below. The file is read locally and never uploaded.</p>
+        <label id="drop-zone" class="drop-zone" for="file-picker">
+          <span class="drop-icon" aria-hidden="true">↥</span>
+          <strong>Drop a file here or browse</strong>
+          <span class="hint">Large files over 50 MB may use substantial memory.</span>
+          <input id="file-picker" type="file" autocomplete="off">
+        </label>
+        <div id="file-info" class="file-info" hidden></div>
+        <label class="toggle data-uri-toggle"><input id="data-uri" type="checkbox"> <span>Include data URI prefix in output</span></label>
+        <label class="standalone-label" for="file-base64-output">Base64 output</label>
+        <textarea id="file-base64-output" autocomplete="off" spellcheck="false" placeholder="Selected file's Base64 appears here…" readonly></textarea>
+        <div class="button-row"><button id="copy-file-output" class="button secondary" type="button">Copy output</button></div>
+      </div>
+
+      <div class="divider" role="separator"></div>
+
+      <div class="file-section">
+        <h2>Base64 to file</h2>
+        <p class="hint">Paste Base64 text, optionally with a data URI prefix, to create a local download.</p>
+        <label for="decode-file-input">Base64 input</label>
+        <textarea id="decode-file-input" autocomplete="off" spellcheck="false" placeholder="Paste Base64 here…"></textarea>
+        <div class="decode-options">
+          <div class="field compact"><label for="download-name">Download filename</label><input id="download-name" type="text" autocomplete="off" spellcheck="false" value="decoded-file.bin"></div>
+          <div class="field compact"><label for="mime-type">MIME type (optional)</label><input id="mime-type" type="text" autocomplete="off" spellcheck="false" placeholder="application/octet-stream"></div>
+        </div>
+        <div class="actions"><button id="download-decoded" class="button primary" type="button">Decode and download</button><button id="clear-files" class="button danger-quiet" type="button">Clear files</button></div>
+        <p id="file-status" class="status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+    <footer><span>Base64 Toolkit</span><span>Offline-friendly · No external dependencies</span></footer>
+  </main>
+</body>
+</html>
