@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Branch Namer — X-Fly G5</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="page-header">
+    <div class="wrap">
+      <h1>Branch Namer</h1>
+      <p class="tagline">Builds a standard branch name from the X-Fly G5 naming convention, so nothing has to be memorized.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <section class="type-select" aria-label="Branch type">
+      <button type="button" class="type-btn is-active" data-type="release-train">
+        <span class="type-btn__label">Release train</span>
+        <span class="type-btn__hint">release/v5.25.5</span>
+      </button>
+      <button type="button" class="type-btn" data-type="from-release">
+        <span class="type-btn__label">From a release</span>
+        <span class="type-btn__hint">R5.25.5/US140791-…</span>
+      </button>
+      <button type="button" class="type-btn" data-type="from-dev-prod">
+        <span class="type-btn__label">From Dev / Production</span>
+        <span class="type-btn__hint">from-XFlyG5-Dev/US140791-…</span>
+      </button>
+      <button type="button" class="type-btn" data-type="stacked">
+        <span class="type-btn__label">Stacked on a work branch</span>
+        <span class="type-btn__hint">R5.25.5/US12345-from-US140791-…</span>
+      </button>
+    </section>
+
+    <form id="branch-form" autocomplete="off">
+
+      <!-- RELEASE TRAIN -->
+      <fieldset class="panel field-group" data-group="release-train">
+        <label class="field">
+          <span class="field__label">Version</span>
+          <input type="text" id="rt-version" placeholder="5.25.5" inputmode="numeric">
+          <span class="field__error" id="rt-version-error"></span>
+        </label>
+      </fieldset>
+
+      <!-- FROM A RELEASE -->
+      <fieldset class="panel field-group" data-group="from-release" hidden>
+        <label class="field">
+          <span class="field__label">Version</span>
+          <input type="text" id="fr-version" placeholder="5.25.5" inputmode="numeric">
+          <span class="field__error" id="fr-version-error"></span>
+        </label>
+        <div class="field-row">
+          <label class="field field--ticket-type">
+            <span class="field__label">Ticket type</span>
+            <select id="fr-ticket-type">
+              <option value="US">US</option>
+              <option value="BUG">BUG</option>
+              <option value="CR">CR</option>
+              <option value="EPIC">EPIC</option>
+			      <option value="EPIC">DU</option>
+            </select>
+          </label>
+          <label class="field field--ticket-id">
+            <span class="field__label">Ticket ID</span>
+            <input type="text" id="fr-ticket-id" placeholder="140791" inputmode="numeric">
+          </label>
+        </div>
+        <span class="field__error" id="fr-ticket-error"></span>
+        <label class="field">
+          <span class="field__label">Short description</span>
+          <input type="text" id="fr-desc" placeholder="summarize-it1">
+          <span class="field__error" id="fr-desc-error"></span>
+        </label>
+      </fieldset>
+
+      <!-- FROM DEV / PRODUCTION -->
+      <fieldset class="panel field-group" data-group="from-dev-prod" hidden>
+        <label class="field">
+          <span class="field__label">Repo</span>
+          <select id="dp-repo">
+            <option value="XFlyG5">XFlyG5 (UI)</option>
+            <option value="XFlyG5Database">XFlyG5Database</option>
+            <option value="XFlyG5API">XFlyG5API</option>
+            <option value="XFlyG5DatabaseREP">XFlyG5DatabaseREP</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="field__label">Source</span>
+          <div class="toggle" id="dp-source" data-value="dev">
+            <button type="button" class="toggle__opt is-active" data-value="dev">Dev</button>
+            <button type="button" class="toggle__opt" data-value="prod">Production</button>
+          </div>
+        </label>
+        <p class="resolved-parent">Parent branch: <code id="dp-parent-preview">from-XFlyG5-Dev</code></p>
+        <div class="field-row">
+          <label class="field field--ticket-type">
+            <span class="field__label">Ticket type</span>
+            <select id="dp-ticket-type">
+              <option value="US">US</option>
+              <option value="BUG">BUG</option>
+              <option value="CR">CR</option>
+              <option value="EPIC">EPIC</option>
+            </select>
+          </label>
+          <label class="field field--ticket-id">
+            <span class="field__label">Ticket ID</span>
+            <input type="text" id="dp-ticket-id" placeholder="140791" inputmode="numeric">
+          </label>
+        </div>
+        <span class="field__error" id="dp-ticket-error"></span>
+        <label class="field">
+          <span class="field__label">Short description</span>
+          <input type="text" id="dp-desc" placeholder="summarize-it1">
+          <span class="field__error" id="dp-desc-error"></span>
+        </label>
+      </fieldset>
+
+      <!-- STACKED ON WORK BRANCH -->
+      <fieldset class="panel field-group" data-group="stacked" hidden>
+        <label class="field">
+          <span class="field__label">Parent branch name (paste the existing branch)</span>
+          <input type="text" id="st-parent" placeholder="R5.25.5/US140791-summarize-it1">
+          <span class="field__error" id="st-parent-error"></span>
+        </label>
+        <p class="resolved-parent" id="st-parsed" hidden>
+          Folder: <code id="st-parsed-folder"></code> &nbsp;·&nbsp; Parent ticket: <code id="st-parsed-ticket"></code>
+        </p>
+        <div class="field-row">
+          <label class="field field--ticket-type">
+            <span class="field__label">New ticket type</span>
+            <select id="st-ticket-type">
+              <option value="US">US</option>
+              <option value="BUG">BUG</option>
+              <option value="CR">CR</option>
+              <option value="EPIC">EPIC</option>
+            </select>
+          </label>
+          <label class="field field--ticket-id">
+            <span class="field__label">New ticket ID</span>
+            <input type="text" id="st-ticket-id" placeholder="12345" inputmode="numeric">
+          </label>
+        </div>
+        <span class="field__error" id="st-ticket-error"></span>
+        <label class="field">
+          <span class="field__label">Short description</span>
+          <input type="text" id="st-desc" placeholder="short-desc">
+          <span class="field__error" id="st-desc-error"></span>
+        </label>
+      </fieldset>
+
+    </form>
+
+    <section class="output panel" aria-live="polite">
+      <div class="output__row">
+        <span class="output__label">Branch name</span>
+        <button type="button" id="copy-btn" class="copy-btn" disabled>Copy</button>
+      </div>
+      <code id="output-value" class="output__value">—</code>
+      <ul id="output-messages" class="output__messages"></ul>
+    </section>
+
+  </main>
+
+  <footer class="page-footer">
+    <div class="wrap">Standardized so a branch name alone tells you the release line and the work item. Existing branches are not affected.</div>
+  </footer>
+
+<script src="script.js"></script>
+</body>
+</html>

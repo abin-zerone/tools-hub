@@ -11,6 +11,16 @@ window.TOOL_REGISTRY = [
     status: "live"
   },
   {
+    id: "branch-namer",
+    name: "Branch Namer",
+    description: "Build standardized X-Fly G5 branch names for release trains, release-based, Dev/Production-based, and stacked work items.",
+    category: "Generators",
+    folder: "branch-namer/index.html",
+    icon: "🌿",
+    tags: ["branch", "git", "naming", "ado", "release", "x-fly", "convention"],
+    status: "live"
+  },
+  {
     id: "url-encode",
     name: "URL Encoder / Decoder",
     description: "Safely encode or decode URL components and query parameter values.",
